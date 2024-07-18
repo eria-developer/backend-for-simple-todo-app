@@ -9,6 +9,9 @@ from rest_framework.generics import get_object_or_404
 
 
 class CategoryListApiView(APIView):
+    permission_classes = []
+    authentication_classes = []
+
     # handling get requests 
     def get(self, request):
         categories = Category.objects.all()
@@ -34,6 +37,9 @@ class CategoryListApiView(APIView):
         
 
 class CategoryDetailApiView(APIView):
+    permission_classes = []
+    authentication_classes = []
+
     def get_object(self, pk):
         return get_object_or_404(Category, pk=pk)
     
@@ -63,3 +69,17 @@ class CategoryDetailApiView(APIView):
         category = self.get_object(pk)
         category.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+
+class CategorySearchAPIView(APIView):
+    permission_classes = []
+    authentication_classes = []
+    
+    def get(self, request):
+        query = request.query_params.get('q')
+        if query:
+            categories = Category.objects.filter(name__icontains=query)
+        else:
+            categories = Category.objects.all()
+        serializer = CategorySerializer(categories, many=True)
+        return Response(serializer.data)
