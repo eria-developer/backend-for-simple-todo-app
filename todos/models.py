@@ -10,6 +10,7 @@ class Category(models.Model):
 
 class Task(models.Model):
     name = models.CharField(max_length=254, null=False)
+    completed = models.BooleanField(default=False)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="task_category")
 
     def __Str__(self):
