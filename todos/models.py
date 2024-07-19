@@ -15,3 +15,5 @@ class Task(models.Model):
 
     def __Str__(self):
         return f"{self.name}"
+    
+    

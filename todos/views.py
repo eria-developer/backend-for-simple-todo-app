@@ -74,7 +74,7 @@ class CategoryDetailApiView(APIView):
 class CategorySearchAPIView(APIView):
     permission_classes = []
     authentication_classes = []
-    
+
     def get(self, request):
         query = request.query_params.get('q')
         if query:
@@ -83,3 +83,29 @@ class CategorySearchAPIView(APIView):
             categories = Category.objects.all()
         serializer = CategorySerializer(categories, many=True)
         return Response(serializer.data)
+    
+
+class TaskListApiView(APIView):
+    permission_classes = []
+    authentication_classes = []
+
+    def get(self, request):
+        tasks = Task.objects.all()
+        serializer = TaskSerializer(tasks, many=True)
+        return Response(serializer.data)
+    
+    def post(self, request):
+        serializer = TaskSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            data = {
+                "Message": "Task created successfully",
+                "Data": serializer.data
+            }
+            return Response(data, status=status.HTTP_201_CREATED)
+        else:
+            data = {
+                "Message": "Failed to create task",
+                "Errors": serializer.errors
+            }
+            return Response(data, status=status.HTTP_400_BAD_REQUEST)
