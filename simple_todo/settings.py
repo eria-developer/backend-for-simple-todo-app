@@ -89,20 +89,13 @@ WSGI_APPLICATION = 'simple_todo.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
 DATABASES = {
-    'default': dj_database_url.config(
-        # Replace this value with your local database's connection string.
-        default='postgresql://simple_todo_app_db_fkzf_user:bMEAfyuXzDezvEujtxJhHtrLKQ4CYS59@dpg-cqd3o8bv2p9s73e70r20-a/simple_todo_app_db_fkzf',
-        conn_max_age=600
-    )
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
 }
+
 
 
 # Password validation
