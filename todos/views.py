@@ -20,7 +20,7 @@ class CategoryListApiView(APIView):
 
     # handling post requests 
     def post(self, request):
-        serializer = self.serializer_class(data=request.data)
+        serializer = CategorySerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             data = {
@@ -155,10 +155,10 @@ class TaskApiSearchView(APIView):
         authentication_classes = []
 
         def get(self, request):
-            query = request.query_params.get("q")
+            query = request.query_params.get('q')
             if query:
-               tasks = Task.objects.filter(name__icontains = query)
+                categories = Task.objects.filter(name__icontains=query)
             else:
-               tasks = Task.objects.all()
-            serializer = TaskSerializer(tasks, many=True)
-            return Response(serializer.data, status=status.HTTP_200_OK)
+                categories = Task.objects.all()
+            serializer = TaskSerializer(categories, many=True)
+            return Response(serializer.data)
