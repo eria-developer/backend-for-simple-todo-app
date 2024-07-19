@@ -2,7 +2,7 @@ from django.db import models
 from authentication.models import CustomUser
 
 class Category(models.Model):
-    owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=254)
 
     def __str__(self):
@@ -10,10 +10,10 @@ class Category(models.Model):
     
 
 class Task(models.Model):
-    owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
+    owner = models.ForeignKey(CustomUser, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=254, null=False)
     completed = models.BooleanField(default=False)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="task_category")
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="task_category", null=True)
 
     def __Str__(self):
         return f"{self.name}"

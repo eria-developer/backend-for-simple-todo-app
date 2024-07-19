@@ -109,3 +109,56 @@ class TaskListApiView(APIView):
                 "Errors": serializer.errors
             }
             return Response(data, status=status.HTTP_400_BAD_REQUEST)
+        
+
+class TaskDetailsApiView(APIView):
+    permission_classes = []
+    authentication_classes = []
+
+    def get_object(self, pk):
+        return get_object_or_404(Task, pk=pk)
+    
+    def get(self, request, pk):
+        task = self.get_object(pk)
+        serializer = TaskSerializer(task)
+        return Response(serializer.data)
+    
+    def put(self, request, pk):
+        task = self.get_object(pk)
+        serializer = TaskSerializer(task, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            data = {
+                "Message": "Task updated successfully",
+                "Data": serializer.data
+            }
+            return Response(data, status=status.HTTP_200_OK)
+        else:
+            data = {
+                "Message": "Failed to update task details",
+                "Error": serializer.errors
+            }
+            return Response(data, status=status.HTTP_400_BAD_REQUEST)
+        
+
+    def delete(self, request, pk):
+        task = self.get_object(pk)
+        task.delete()
+        data = {
+            "Message": "Task deleted successfully"
+        }
+        return Response(data, status=status.HTTP_200_OK)
+    
+
+class TaskApiSearchView(APIView):
+        permission_classes = []
+        authentication_classes = []
+
+        def get(self, request):
+            query = request.query_params.get("q")
+            if query:
+               tasks = Task.objects.filter(name__icontains = query)
+            else:
+               tasks = Task.objects.all()
+            serializer = TaskSerializer(tasks, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
